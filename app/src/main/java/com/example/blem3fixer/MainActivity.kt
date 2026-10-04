@@ -25,7 +25,7 @@ class MainActivity : Activity() {
         setContentView(content)
         content.addView(TextView(this).apply { text = "BLE-M3 控制器"; textSize = 26f })
         content.addView(TextView(this).apply {
-            text = "先打开相机或任意目标 App，再点击下方按钮。透明准星会覆盖当前界面；直接点击目标位置并确认即可。"
+            text = "先打开相机或任意目标 App，再点击下方按钮。透明准星会覆盖当前界面；直接点击目标位置并确认即可。已按本机实测范围 X=0–1800、Y=0–4100 自动换算。"
             textSize = 16f
             setPadding(0, 32, 0, 28)
         })

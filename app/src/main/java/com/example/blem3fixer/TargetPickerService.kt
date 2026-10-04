@@ -17,6 +17,11 @@ import kotlin.math.roundToInt
 
 /** Full-screen picker: tap a target, then tap the confirmation area. */
 class TargetPickerService : Service() {
+    companion object {
+        // Measured from BLE-M3's actual ABS axes, not from the 0..4095 event example.
+        private const val RAW_MAX_X = 1800f
+        private const val RAW_MAX_Y = 4100f
+    }
     private lateinit var windowManager: WindowManager
     private lateinit var picker: PickerView
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -106,8 +111,8 @@ class TargetPickerService : Service() {
         if (screenWidth <= 0 || screenHeight <= 0) return
         saving = true
         Thread {
-            val rawX = (screenX / screenWidth * 4095f).roundToInt().coerceIn(0, 4095)
-            val rawY = (screenY / screenHeight * 4095f).roundToInt().coerceIn(0, 4095)
+            val rawX = (screenX / screenWidth * RAW_MAX_X).roundToInt().coerceIn(0, RAW_MAX_X.toInt())
+            val rawY = (screenY / screenHeight * RAW_MAX_Y).roundToInt().coerceIn(0, RAW_MAX_Y.toInt())
             val command = "sed -i 's/^target_x=.*/target_x=$rawX/; s/^target_y=.*/target_y=$rawY/' /data/adb/ble-m3-remapper.conf"
             val success = try {
                 val process = Runtime.getRuntime().exec(arrayOf("su", "-c", command))

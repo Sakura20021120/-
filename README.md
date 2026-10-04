@@ -1,6 +1,6 @@
 # BLE-M3 Fixer
 
-LSPosed module that redirects the BLE-M3 center-button click from `(1012, 1740)` to `(2048, 3600)` in the hardware's 0–4095 coordinate space.
+Magisk-native BLE-M3 center-button remapper. The measured hardware axes are X `0..1800` and Y `0..4100`; the companion picker converts screen taps into this coordinate space.
 
 Enable the module for **System Framework (`android`) only**, then reboot. Adjust `TARGET_X` and `TARGET_Y` in `MainHook.kt` and rebuild if the shutter position needs calibration.
 

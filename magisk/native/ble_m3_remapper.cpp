@@ -23,8 +23,8 @@ constexpr char kConfigPath[] = "/data/adb/ble-m3-remapper.conf";
 constexpr char kStatePath[] = "/data/adb/ble-m3-remapper.state";
 constexpr int kDefaultX = 1012;
 constexpr int kDefaultY = 1740;
-constexpr int kTargetX = 2048;
-constexpr int kTargetY = 3600;
+constexpr int kTargetX = 900;
+constexpr int kTargetY = 3370;
 constexpr int kTolerance = 5;
 
 struct Config {
