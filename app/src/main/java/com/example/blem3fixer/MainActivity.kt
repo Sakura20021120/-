@@ -25,8 +25,9 @@ class MainActivity : Activity() {
         setContentView(content)
         content.addView(TextView(this).apply { text = "BLE-M3 控制器"; textSize = 26f })
         content.addView(TextView(this).apply {
-            text = "在相机或任意 App 打开目标界面后，点下方按钮。透明准星会覆盖当前界面；直接点目标位置并确认即可。"
-            textSize = 16f; setPadding(0, 32, 0, 28)
+            text = "先打开相机或任意目标 App，再点击下方按钮。透明准星会覆盖当前界面；直接点击目标位置并确认即可。"
+            textSize = 16f
+            setPadding(0, 32, 0, 28)
         })
         content.addView(Button(this).apply {
             text = "选择中心键点击位置"
@@ -44,19 +45,31 @@ class MainActivity : Activity() {
     private fun startPicker() {
         if (!Settings.canDrawOverlays(this)) {
             startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")))
-            result.text = "请允许“显示在其他应用上层”，然后返回此页面再点一次。"
+            result.text = "请允许“显示在其他应用上层”，然后返回此页面再点击一次。"
             return
         }
-        startService(Intent(this, TargetPickerService::class.java))
-        moveTaskToBack(true)
+        try {
+            startService(Intent(this, TargetPickerService::class.java))
+            moveTaskToBack(true)
+        } catch (_: Throwable) {
+            result.text = "无法启动选点层，请重新打开应用后再试。"
+        }
     }
 
     private fun showCurrent() {
-        val text = rootRead("/data/adb/ble-m3-remapper.conf")
-        val x = Regex("target_x=(\\d+)").find(text ?: "")?.groupValues?.get(1)
-        val y = Regex("target_y=(\\d+)").find(text ?: "")?.groupValues?.get(1)
-        result.text = if (x != null && y != null) "当前中心键目标：($x, $y)\n（这是自动换算后的原始坐标）"
-        else "未读取到 Magisk 模块配置。请确认已安装模块并授予 Root。"
+        result.text = "正在读取 Magisk 配置…"
+        Thread {
+            val text = rootRead("/data/adb/ble-m3-remapper.conf")
+            val x = Regex("target_x=(\\d+)").find(text ?: "")?.groupValues?.get(1)
+            val y = Regex("target_y=(\\d+)").find(text ?: "")?.groupValues?.get(1)
+            runOnUiThread {
+                result.text = if (x != null && y != null) {
+                    "当前中心键目标：($x, $y)\n（这是自动换算后的原始坐标）"
+                } else {
+                    "未读取到 Magisk 模块配置。请确认已安装模块并授予 Root。"
+                }
+            }
+        }.start()
     }
 
     private fun rootRead(path: String): String? = try {

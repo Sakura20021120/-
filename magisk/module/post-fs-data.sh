@@ -7,7 +7,7 @@ if [ ! -f "$CFG" ]; then
 default_x=1012
 default_y=1740
 target_x=2048
-target_y=3600
+target_y=3370
 tolerance=5
 EOF
   chmod 0600 "$CFG"
