@@ -12,5 +12,6 @@ android { namespace 'com.example.blem3fixer'; compileSdk 35
 }
 
 kotlin { jvmToolchain(17) }
+kotlinOptions { jvmTarget = '17' }
 
 dependencies { compileOnly files('libs/api-82.jar') }
