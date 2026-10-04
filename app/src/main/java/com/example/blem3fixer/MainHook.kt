@@ -4,9 +4,9 @@ import android.view.InputDevice
 import android.view.MotionEvent
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_LoadPackage
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
+import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 class MainHook : IXposedHookLoadPackage {
     companion object {
