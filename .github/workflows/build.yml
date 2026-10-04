@@ -9,6 +9,12 @@ jobs:
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '8.7' }
+      - name: Download Xposed API 82
+        run: |
+          mkdir -p app/libs
+          curl --fail --location --retry 3 \
+            https://repository-cdn.liferay.com/nexus/content/repositories/gradle-plugins/de/robv/android/xposed/api/82/api-82.jar \
+            --output app/libs/api-82.jar
       - run: gradle assembleRelease --stacktrace --warning-mode all
       - uses: actions/upload-artifact@v4
         with: { name: ble-m3-fixer, path: app/build/outputs/apk/release/*.apk }
