@@ -20,6 +20,7 @@ namespace {
 constexpr char kDeviceName[] = "BLE-M3";
 constexpr char kVirtualName[] = "BLE-M3 Remapper";
 constexpr char kConfigPath[] = "/data/adb/ble-m3-remapper.conf";
+constexpr char kStatePath[] = "/data/adb/ble-m3-remapper.state";
 constexpr int kDefaultX = 1012;
 constexpr int kDefaultY = 1740;
 constexpr int kTargetX = 2048;
@@ -56,6 +57,13 @@ void LoadConfig(Config* config) {
     if (std::strcmp(key, "target_y") == 0) config->target_y = value;
     if (std::strcmp(key, "tolerance") == 0) config->tolerance = value;
   }
+  std::fclose(file);
+}
+
+void WriteState(int x, int y, bool touch_down) {
+  FILE* file = std::fopen(kStatePath, "w");
+  if (file == nullptr) return;
+  std::fprintf(file, "last_x=%d\nlast_y=%d\ntouch_down=%d\n", x, y, touch_down ? 1 : 0);
   std::fclose(file);
 }
 
@@ -223,6 +231,11 @@ void ProcessDevice(const std::string& path) {
     if (event.type == EV_ABS && event.code == ABS_Y) y = event.value;
     if (event.type != EV_SYN || event.code != SYN_REPORT) continue;
 
+    // The companion app updates this small file through root. Reloading at report
+    // boundaries makes a changed center target take effect without a reboot.
+    config = Config{};
+    LoadConfig(&config);
+    WriteState(x, y, touch_down);
     RemapBatch(&batch, touch_down, x, y, config);
     if (!WriteEvents(uinput, batch)) break;
     batch.clear();
