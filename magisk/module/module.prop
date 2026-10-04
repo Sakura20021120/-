@@ -1,0 +1,6 @@
+id=ble-m3-remapper
+name=BLE-M3 Center-Key Remapper
+version=1.0.0
+versionCode=1
+author=Sakura20021120
+description=Redirect BLE-M3 center-key absolute touch from its fixed position to a configurable target.

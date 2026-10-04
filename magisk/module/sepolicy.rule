@@ -1,0 +1,3 @@
+# Permit the Magisk domain to exclusively read the real BLE device and emit a virtual input device.
+allow magisk input_device:chr_file rw_file_perms
+allow magisk uinput_device:chr_file rw_file_perms
