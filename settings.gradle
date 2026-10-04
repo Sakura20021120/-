@@ -3,7 +3,11 @@ import org.gradle.api.initialization.resolve.RepositoriesMode
 pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories { google(); mavenCentral() }
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = 'https://artifactory.appodeal.com/appodeal-public/' }
+    }
 }
 rootProject.name = 'BLE-M3-Fixer'
 include ':app'
